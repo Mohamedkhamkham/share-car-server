@@ -1,23 +1,23 @@
 <h1> Principal Routes </h1>
 
-| HTTP Method  | Route                   | Description                          |
-|--------------|-------------------------|--------------------------------------|
-| GET          | `/maps`                 | API de Google Maps                   |
-| GET          | `/trips`                | Mis viajes                           |
-| POST         | `/signup`               | Crear usuario nuevo                  |
-| POST         | `/login`                | Iniciar sesión                       |
-| POST         | `/verify`               | Verificar sesión                     |
+| HTTP Method  | Route                   | Description                             |
+|--------------|-------------------------|-----------------------------------------|
+| GET          | `/api/map`                 | API de Google Maps                   |
+| GET          | `/api/trips`                | Mis viajes                           |
+| POST         | `/api/signup`               | Crear usuario nuevo                  |
+| POST         | `/api/login`                | Iniciar sesión                       |
+| POST         | `/api/verify`               | Verificar sesión                     |
  
 
 <h1> My Trips Routes</h1>
 
 | HTTP Method  | Route                   | Description                          |
 |--------------|-------------------------|--------------------------------------|
-| GET          | `/myTrips`              | Viajes del usuario                   |
-| POST         | `/my-trips/add`         | Crear viaje de conductor             |
-| GET          | `/my-trips/details`     | Detalles del viaje                   |
-| DELETE       | `/myTrips/delete`       | Eliminar un viaje de conductor        |
-| PUT          | `/myTrips/edit`         | Editar un viaje del conductor         |
+| GET          | `/api/trips`            | Viajes del usuario                   |
+| POST         | `/api/trips/add`        | Crear viaje de conductor             |
+| GET          | `/api/trips/:id/details`| Detalles del viaje                   |
+| DELETE       | `/api/trips/:id/delete` | Eliminar un viaje de conductor        |
+| PUT          | `/api/trips/:id/edit`   | Editar un viaje del conductor         |
 
 
 
@@ -26,15 +26,15 @@
 
 | HTTP Method  | Route                     | Description                          |
 |--------------|---------------------------|--------------------------------------|
-| GET          | `/user`                   | Perfil de usuario                    | 
-| PUT          | `/user/edit`              | Editar Perfil de usuario             |
-| POST         | `/user/delete`            | Eliminar Perfil de usuario           |
+| GET          | `/api/user`                   | Perfil de usuario                    | 
+| PUT          | `/api/user/edit`              | Editar Perfil de usuario             |
+| POST         | `/api/user/delete`            | Eliminar Perfil de usuario           |
 
 
 <h1> Manejo de Errores en el Servidor </h1>
 
 | HTTP Method  | Route          | Description                          |
 |--------------|----------------|--------------------------------------|
-| GET          | `/error/404`   | Página de error para recurso no encontrado (404)   |
+| GET          | `/api/error/404`   | Página de error para recurso no encontrado (404)   |
     
 

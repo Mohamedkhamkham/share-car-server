@@ -31,10 +31,3 @@
 | POST         | `/api/user/delete`            | Eliminar Perfil de usuario           |
 
 
-<h1> Manejo de Errores en el Servidor </h1>
-
-| HTTP Method  | Route          | Description                          |
-|--------------|----------------|--------------------------------------|
-| GET          | `/api/error/404`   | Página de error para recurso no encontrado (404)   |
-    
-

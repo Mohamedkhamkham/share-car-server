@@ -4,3 +4,4 @@ module.exports = app => {
     app.use("/api/trips", tripsRoutes)
 
 }
+

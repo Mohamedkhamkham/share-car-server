@@ -16,6 +16,11 @@ const userSchema = new Schema({
     required: [true, 'El nombre de usuario es obligatorio'],
     minlength: [3, 'El usuario necesita mínimo 3 caracteres']
   },
+  // carSpecs: {
+  //   model: String,
+  //   color: String,
+  //   electric: Boolean
+  // },
   carModel: {
     type: String,
     required: [true, 'El modelo de coche es obligatorio']

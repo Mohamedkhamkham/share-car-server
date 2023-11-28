@@ -15,7 +15,7 @@ const tripSchema = new Schema(
             required: [true, 'La fecha es obligatoria.']
         },
         time: {
-            type: String,
+            type: Number,
             required: [true, 'La hora es obligatoria.']
         },
         availableSeats: {

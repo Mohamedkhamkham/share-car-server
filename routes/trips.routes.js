@@ -3,6 +3,7 @@ const router = require("express").Router()
 const Trip = require('../models/Trip.model')
 
 router.get("/getAllTrips", (req, res) => {
+    console.log("Reached getAllTrips route")
     Trip
         .find()
         .sort({ destination: 1 })

@@ -15,6 +15,16 @@ router.get("/getAllTrips", (req, res) => {
 });
 
 
+router.post("/trips/saveTrip", (req, res, next) => {
+
+    const { origin, destination, date, time, availableSeats, price } = req.body
+
+    Trip
+        .create({ origin, destination, date, time, availableSeats, price })
+        .then(() => res.sendStatus(200))
+        .catch(err => next(err))
+})
+
 module.exports = router
 
 

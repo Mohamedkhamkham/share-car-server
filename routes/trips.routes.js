@@ -25,13 +25,33 @@ router.get("/trips/getAllTrips", (req, res) => {
 });
 
 
-router.get("/getOneTrips/:trips_id", (req, res, next) => {
+router.get("/trips/:id", (req, res, next) => {
 
-    const { trips_id } = req.params
+    const { id } = req.params
 
-    Coaster
-        .findById(trips_id)
+    Trip
+        .findById(id)
         .then(response => res.json(response))
+        .catch(err => next(err))
+})
+
+router.delete("/trips/:id", (req, res, next) => {
+    const { id } = req.params
+    console.log("hola: " + id)
+
+    Trip
+        .deleteOne({ _id: id })
+        .then(() => res.sendStatus(204))
+})
+
+router.put("/trips/:id", (req, res, next) => {
+
+    const { id } = req.params
+    const update = req.body
+
+    Trip
+        .updateOne({ _id: id }, { $set: update })
+        .then(() => res.sendStatus(200))
         .catch(err => next(err))
 })
 

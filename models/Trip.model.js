@@ -29,6 +29,11 @@ const tripSchema = new Schema(
             min: [0, 'El precio no puede ser negativo.']
         },
 
+        owner: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+
     },
     {
         timestamps: true,

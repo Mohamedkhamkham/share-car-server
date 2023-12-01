@@ -1,9 +1,10 @@
 const router = require("express").Router()
 
+const verifyToken = require("../middlewares/verifyToken");
 const Trip = require('../models/Trip.model')
 
 router.get("/trips/getAllTrips", (req, res) => {
-    console.log("Reached getAllTrips route")
+
     Trip
         .find()
         .sort({ origin: 1 })
@@ -13,15 +14,11 @@ router.get("/trips/getAllTrips", (req, res) => {
             date: 1,
             time: 1,
             price: 1,
-            availableSeats: 1
-
-
+            availableSeats: 1,
+            owner: 1
         })
         .then(response => res.json(response))
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        });
+        .catch(err => next(err));
 });
 
 
@@ -37,11 +34,11 @@ router.get("/trips/:id", (req, res, next) => {
 
 router.delete("/trips/:id", (req, res, next) => {
     const { id } = req.params
-    console.log("hola: " + id)
 
     Trip
         .deleteOne({ _id: id })
         .then(() => res.sendStatus(204))
+        .catch(err => next(err))
 })
 
 router.put("/trips/:id", (req, res, next) => {
@@ -51,23 +48,20 @@ router.put("/trips/:id", (req, res, next) => {
 
     Trip
         .updateOne({ _id: id }, { $set: update })
-        .then(() => res.sendStatus(200))
+        .then(() => res.sendStatus(204))
         .catch(err => next(err))
 })
 
 
-router.post("/trips/saveTrip", (req, res, next) => {
+router.post("/trips/saveTrip", verifyToken, (req, res, next) => {
 
     const { origin, destination, date, time, availableSeats, price } = req.body
+    const { _id: owner } = req.payload
 
     Trip
-        .create({ origin, destination, date, time, availableSeats, price })
+        .create({ origin, destination, date, time, availableSeats, price, owner })
         .then(() => res.sendStatus(200))
         .catch(err => next(err))
 })
 
 module.exports = router
-
-
-
-

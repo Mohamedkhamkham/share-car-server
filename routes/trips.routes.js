@@ -3,7 +3,7 @@ const router = require("express").Router()
 const verifyToken = require("../middlewares/verifyToken");
 const Trip = require('../models/Trip.model')
 
-router.get("/trips/getAllTrips", (req, res) => {
+router.get("/getAllTrips", (req, res) => {
 
     Trip
         .find()
@@ -22,7 +22,7 @@ router.get("/trips/getAllTrips", (req, res) => {
 });
 
 
-router.get("/trips/:id", (req, res, next) => {
+router.get("/:id", (req, res, next) => {
 
     const { id } = req.params
 
@@ -32,7 +32,7 @@ router.get("/trips/:id", (req, res, next) => {
         .catch(err => next(err))
 })
 
-router.delete("/trips/:id", (req, res, next) => {
+router.delete("/:id", (req, res, next) => {
     const { id } = req.params
 
     Trip
@@ -41,7 +41,7 @@ router.delete("/trips/:id", (req, res, next) => {
         .catch(err => next(err))
 })
 
-router.put("/trips/:id", (req, res, next) => {
+router.put("/:id", (req, res, next) => {
 
     const { id } = req.params
     const update = req.body
@@ -53,7 +53,7 @@ router.put("/trips/:id", (req, res, next) => {
 })
 
 
-router.post("/trips/saveTrip", verifyToken, (req, res, next) => {
+router.post("/saveTrip", verifyToken, (req, res, next) => {
 
     const { origin, destination, date, time, availableSeats, price } = req.body
     const { _id: owner } = req.payload

@@ -15,7 +15,7 @@ const tripSchema = new Schema(
             required: [true, 'La fecha es obligatoria.']
         },
         time: {
-            type: Number,
+            type: String,
             required: [true, 'La hora es obligatoria.']
         },
         availableSeats: {
@@ -32,6 +32,10 @@ const tripSchema = new Schema(
         owner: {
             type: Schema.Types.ObjectId,
             ref: 'User'
+        },
+        image: {
+            type: String,
+            required: [false, ""]
         }
 
     },

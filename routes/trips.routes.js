@@ -15,7 +15,8 @@ router.get("/getAllTrips", verifyToken, (req, res) => {
             time: 1,
             price: 1,
             availableSeats: 1,
-            owner: 1
+            owner: 1,
+            image: 1
         })
         .then(response => res.json(response))
         .catch(err => next(err));
@@ -25,6 +26,7 @@ router.get("/getAllTrips", verifyToken, (req, res) => {
 router.get("/:id", verifyToken, (req, res, next) => {
 
     const { id } = req.params
+    const { _id: owner } = req.payload
 
     Trip
         .findById(id)
@@ -61,10 +63,10 @@ router.put("/:id", verifyToken, (req, res, next) => {
 
 router.post("/saveTrip", verifyToken, (req, res, next) => {
 
-    const { origin, destination, date, time, availableSeats, price } = req.body
+    const { origin, destination, date, time, availableSeats, price, image } = req.body
     const { _id: owner } = req.payload
     Trip
-        .create({ origin, destination, date, time, availableSeats, price, owner })
+        .create({ origin, destination, date, time, availableSeats, price, owner, image })
         .then(() => res.sendStatus(200))
         .catch(err => next(err))
 })

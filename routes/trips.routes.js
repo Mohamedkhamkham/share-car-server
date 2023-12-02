@@ -3,7 +3,7 @@ const router = require("express").Router()
 const verifyToken = require("../middlewares/verifyToken");
 const Trip = require('../models/Trip.model')
 
-router.get("/getAllTrips", (req, res) => {
+router.get("/getAllTrips", verifyToken, (req, res) => {
 
     Trip
         .find()
@@ -22,7 +22,7 @@ router.get("/getAllTrips", (req, res) => {
 });
 
 
-router.get("/:id", (req, res, next) => {
+router.get("/:id", verifyToken, (req, res, next) => {
 
     const { id } = req.params
 
@@ -32,7 +32,7 @@ router.get("/:id", (req, res, next) => {
         .catch(err => next(err))
 })
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", verifyToken, (req, res, next) => {
     const { id } = req.params
 
     Trip
@@ -41,15 +41,21 @@ router.delete("/:id", (req, res, next) => {
         .catch(err => next(err))
 })
 
-router.put("/:id", (req, res, next) => {
+router.put("/:id", verifyToken, (req, res, next) => {
 
     const { id } = req.params
     const update = req.body
 
-    Trip
-        .updateOne({ _id: id }, { $set: update })
-        .then(() => res.sendStatus(204))
-        .catch(err => next(err))
+    const { _id: owner } = req.payload
+    if (update.owner == owner) {
+        Trip
+            .updateOne({ _id: id }, { $set: update })
+            .then(() => res.sendStatus(204))
+            .catch(err => next(err))
+    } else {
+        console.log("chupamela")
+        res.sendStatus(403)
+    }
 })
 
 
@@ -57,7 +63,6 @@ router.post("/saveTrip", verifyToken, (req, res, next) => {
 
     const { origin, destination, date, time, availableSeats, price } = req.body
     const { _id: owner } = req.payload
-
     Trip
         .create({ origin, destination, date, time, availableSeats, price, owner })
         .then(() => res.sendStatus(200))

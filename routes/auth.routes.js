@@ -16,27 +16,7 @@ const saltRounds = 10
 router.post('/signup', (req, res, next) => {
 
     const { email, password, username, carModel, carColor } = req.body
-
-    if (password.length < 2) {
-        res.status(400).json({ message: 'Password must have at least 3 characters' })
-        return
-    }
-
-
-    User
-        .findOne({ email })
-        .then((foundUser) => {
-
-            if (foundUser) {
-                res.status(400).json({ message: "User already exists." })
-                return
-            }
-
-            const salt = bcrypt.genSaltSync(saltRounds)
-            const hashedPassword = bcrypt.hashSync(password, salt)
-
-            return User.create({ email, password: hashedPassword, username, carModel, carColor })
-        })
+    User.create({ email, password, username, carModel, carColor })
         .then(() => res.sendStatus(201))
         .catch(err => next(err))
 
@@ -63,8 +43,8 @@ router.post('/login', (req, res, next) => {
 
             if (bcrypt.compareSync(password, foundUser.password)) {
 
-                const { _id, email, username } = foundUser;
-                const payload = { _id, email, username }
+                const { _id, email, username, imageUrl } = foundUser;
+                const payload = { _id, email, username, imageUrl }
 
                 const authToken = jwt.sign(
                     payload,
@@ -83,17 +63,9 @@ router.post('/login', (req, res, next) => {
         .catch(err => next(err));
 })
 
-
-
-
 router.get('/verify', verifyToken, (req, res, next) => {
     const loggedUser = req.payload;
     res.json({ loggedUser });
 })
-
-
-
-
-
 
 module.exports = router

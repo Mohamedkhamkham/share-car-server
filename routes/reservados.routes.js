@@ -1,67 +1,40 @@
-const router = require("express").Router()
-
+const router = require("express").Router();
 const verifyToken = require("../middlewares/verifyToken");
-const Reservado = require('../models/Reservado.model')
-const Trip = require('../models/Trip.model')
+const Reservado = require('../models/Reservado.model');
+const Trip = require('../models/Trip.model');
 
-router.get("/:id", verifyToken, (req, res) => {
-    const { id } = req.params
-    console.log(id)
-    Reservado
-        .find({ user_id: id })
-        .populate('trips')
-        .exec()
-        .then(response =>
-            res.json(response)
-        )
-        .catch(err => next(err));
+// Get user reservations by ID
+router.get("/:id", verifyToken, async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const userReservations = await Reservado.findOne({ user_id: id }).populate('trips').exec();
+        res.json(userReservations);
+    } catch (err) {
+        next(err);
+    }
 });
 
+// Handle reservation creation and cancellation
+router.post("/", verifyToken, async (req, res, next) => {
+    try {
+        const { user_id, trip_id } = req.body;
+        const userReservations = await Reservado.findOne({ user_id });
 
-router.post("/", verifyToken, (req, res, next) => {
-
-    const { user_id } = req.body
-    const { trip_id } = req.body
-
-    let userReservafind = null;
-
-    Reservado
-        .findOne({ user_id: user_id })
-        .then(data => {
-            userReservafind = data;
-
-            if (userReservafind != null) {
-                if (userReservafind.trips.includes(trip_id)) {
-                    Reservado
-                        .updateOne({ user_id, $pull: { trips: trip_id } })
-                        .then(response => res.json(response))
-                        .catch(err => next(err))
-                } else {
-                    Reservado
-                        .updateOne({ user_id, $push: { trips: trip_id } })
-                        .then(response => res.json(response))
-                        .catch(err => next(err))
-                }
-
+        if (userReservations) {
+            if (userReservations.trips.includes(trip_id)) {
+                await Reservado.updateOne({ user_id, $pull: { trips: trip_id } });
             } else {
-                console.log("CREAR")
-                const document = {
-                    "user_id": user_id,
-                    "trips": [trip_id]
-                }
-                Reservado
-                    .create(document)
-                    .then(response => res.json(response))
-                    .catch(err => next(err))
+                await Reservado.updateOne({ user_id, $push: { trips: trip_id } });
             }
-        })
-        .catch(err => {
-            console.error('Error en la consulta:', err);
-        });
+            res.json(userReservations);
+        } else {
+            await Reservado.create({ user_id, trips: [trip_id] });
+            res.json(userReservations);
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        next(err);
+    }
+});
 
-
-})
-
-
-
-module.exports = router
+module.exports = router;

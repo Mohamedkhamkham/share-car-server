@@ -55,7 +55,6 @@ router.put("/:id", verifyToken, (req, res, next) => {
             .then(() => res.sendStatus(204))
             .catch(err => next(err))
     } else {
-        console.log("chupamela")
         res.sendStatus(403)
     }
 })

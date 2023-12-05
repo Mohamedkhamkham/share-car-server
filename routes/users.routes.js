@@ -18,7 +18,6 @@ router.get("/", verifyToken, (req, res) => {
         .catch(err => next(err));
 });
 
-
 router.get("/:id", verifyToken, (req, res, next) => {
 
     const { id } = req.params

@@ -59,7 +59,6 @@ router.put("/:id", verifyToken, (req, res, next) => {
     }
 })
 
-
 router.post("/saveTrip", verifyToken, (req, res, next) => {
 
     const { origin, destination, date, time, availableSeats, price, image } = req.body

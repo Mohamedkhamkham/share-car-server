@@ -3,7 +3,6 @@ const verifyToken = require("../middlewares/verifyToken");
 const Reservado = require('../models/Reservado.model');
 const Trip = require('../models/Trip.model');
 
-// Get user reservations by ID
 router.get("/:id", verifyToken, async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -14,7 +13,6 @@ router.get("/:id", verifyToken, async (req, res, next) => {
     }
 });
 
-// Handle reservation creation and cancellation
 router.post("/", verifyToken, async (req, res, next) => {
     try {
         const { user_id, trip_id } = req.body;

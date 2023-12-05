@@ -1,10 +1,8 @@
-const bcrypt = require('bcryptjs')
-const router = require("express").Router();
-const verifyToken = require("../middlewares/verifyToken")
+const router = require("express").Router()
 
-const jwt = require('jsonwebtoken');
+const verifyToken = require("../middlewares/verifyToken")
 const User = require("../models/User.model")
-const saltRounds = 10
+
 
 router.post('/signup', (req, res, next) => {
 
@@ -29,27 +27,15 @@ router.post('/login', (req, res, next) => {
 
             if (!foundUser) {
                 res.status(401).json({ message: "User not found." })
-                return;
+                return
             }
-
-            if (bcrypt.compareSync(password, foundUser.password)) {
-
-                const { _id, email, username, imageUrl } = foundUser;
-                const payload = { _id, email, username, imageUrl }
-
-                const authToken = jwt.sign(
-                    payload,
-                    process.env.TOKEN_SECRET,
-                    { algorithm: 'HS256', expiresIn: "6h" }
-                )
-
-                res.json({ authToken })
-
+            if (foundUser.validatePassword(password)) {
+                const authToken = foundUser.signToken()
+                res.status(200).json({ authToken })
             }
             else {
                 res.status(401).json({ message: "Incorrect password" });
             }
-
         })
 
         .catch(err => next(err));

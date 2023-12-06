@@ -13,22 +13,21 @@ router.get("/:id", verifyToken, async (req, res, next) => {
     }
 });
 
+// TODO: REVISAR QUE NO QUEDE NADA EN CASTELLANO
+
 router.post("/", verifyToken, async (req, res, next) => {
     try {
         const { user_id, trip_id } = req.body;
-        const userFavoritos = await Favorito.findOne({ user_id });
+        const userFavs = await Favorito.findOne({ user_id });
 
-        if (userFavoritos) {
-            if (userFavoritos.trips.includes(trip_id)) {
+        if (userFavs) {
 
-                await Favorito.updateOne({ user_id, $pull: { trips: trip_id } });
-            } else {
+            const updateQuery = userFavs.trips.includes(trip_id) ? { user_id, $pull: { trips: trip_id } } : { user_id, $push: { trips: trip_id } }
+            await Favorito.updateOne(updateQuery)
 
-                await Favorito.updateOne({ user_id, $push: { trips: trip_id } });
-            }
-            const userFavoritosUpdate = await Favorito.findOne({ user_id });
+            const userFavoritosUpdate = await Favorito.findOne({ user_id })
+            res.json(userFavoritosUpdate)
 
-            res.json(userFavoritosUpdate);
         } else {
 
             const userFavoritoCreate = await Favorito.create({ user_id, trips: [trip_id] });

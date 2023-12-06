@@ -26,7 +26,6 @@ router.get("/getAllTrips", verifyToken, (req, res) => {
 router.get("/:id", verifyToken, (req, res, next) => {
 
     const { id } = req.params
-    const { _id: owner } = req.payload
 
     Trip
         .findById(id)
@@ -47,8 +46,8 @@ router.put("/:id", verifyToken, (req, res, next) => {
 
     const { id } = req.params
     const update = req.body
-
     const { _id: owner } = req.payload
+
     if (update.owner == owner) {
         Trip
             .updateOne({ _id: id }, { $set: update })

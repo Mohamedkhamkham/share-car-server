@@ -19,18 +19,17 @@ router.post("/", verifyToken, async (req, res, next) => {
         const userReservations = await Reservado.findOne({ user_id });
 
         if (userReservations) {
-            if (userReservations.trips.includes(trip_id)) {
-                await Reservado.updateOne({ user_id, $pull: { trips: trip_id } });
-            } else {
-                await Reservado.updateOne({ user_id, $push: { trips: trip_id } });
-            }
+
+            const updateQuery = userReservations.trips.includes(trip_id) ? { user_id, $pull: { trips: trip_id } } : { user_id, $push: { trips: trip_id } }
+
+            await Reservado.updateOne(updateQuery);
+
             res.json(userReservations);
         } else {
             await Reservado.create({ user_id, trips: [trip_id] });
             res.json(userReservations);
         }
     } catch (err) {
-        console.error('Error:', err);
         next(err);
     }
 });

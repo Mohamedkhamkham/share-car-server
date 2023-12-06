@@ -36,8 +36,18 @@ const tripSchema = new Schema(
         image: {
             type: String,
             required: [false, ""]
+        },
+        location: {
+            type: {
+                type: String
+            },
+            coordinatesOrigin: {
+                type: [Number]
+            },
+            coordinatesDestination: {
+                type: [Number]
+            }
         }
-
     },
     {
         timestamps: true,
